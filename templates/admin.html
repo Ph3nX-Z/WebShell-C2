@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>Admin Pannel</title>
+  </head>
+  {%if error_code%}
+  <div class="alert alert-primary" role="alert">
+    {{error_code}}
+  </div>
+  {%endif%}
+  <h1>Login</h1>
+  <body>
+    <form method="POST">
+      <div class="form-group">
+        <label>Username :</label>
+        <input name="username" type="text" class="form-control" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label>Password :</label>
+        <input name="password" type="password" class="form-control" placeholder="Password">
+        <small id="emailHelp" class="form-text text-muted">Any violations will be reported !</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+  </body>
+</html>

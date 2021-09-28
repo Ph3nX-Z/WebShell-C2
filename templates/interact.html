@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <style>
+  h1 {
+    text-align: center;
+    font-size: 6em;
+    margin-bottom: 1em;
+  }
+  ul label {
+    width:33%;
+    text-align: center;
+  }
+  h2 {
+    text-decoration: underline;
+  }
+  body {
+    margin-right: 5%;
+    margin-left: 5%;
+  }
+  </style>
+  {%if error_code%}
+  <div class="alert alert-primary" role="alert">
+  {{error_code}}
+  </div>
+  {%endif%}
+  <body>
+    <h1>Client Pannel</h1>
+    <h2>Interact:</h2>
+    <form method="POST">
+    <div class="form-group">
+      <label>Id To Remove :</label>
+      <input name="id-text" type="text" class="form-control" placeholder="Id">
+      <small id="emailHelp" class="form-text text-muted">The client will be deleted.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Remove</button>
+    </form>
+    <h2>All the clients :</h2>
+    <ul class="list-group">
+      {%for i in content%}
+      <li class="list-group-item"><label>{{i[0]}}</label><label>{{i[1]}}</label><label>{{i[2]}}</label></li>
+      {%endfor%}
+    </ul>
+  </body>
+</html>
