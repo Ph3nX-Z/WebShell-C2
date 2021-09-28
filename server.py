@@ -185,41 +185,47 @@ def account():
         return render_template("admin.html")
 
 
-@app.route("/command/"+admin_token)
+@app.route("/command/"+admin_token,methods=["GET","POST"])
 def command_panel():
     remove_doublons()
-    if request.args.get('password') and request.args.get('id') and request.args.get('command'):
-        if request.args.get('password')==admin_password:
-            command = request.args.get('command')
-            if request.args.get('id') not in [i[0] for i in get_id_command()]:
-                last_csv = get_id_command()
-                to_keep = []
-                for elem in last_csv:
-                    if request.args.get('id') not in elem:
-                        to_keep.append(elem)
-                with open('id_and_commands.csv', mode='w') as csv_file:
-                    fieldnames = ['id', 'command', 'status']
-                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                    writer.writeheader()
-                    writer.writerow({'id': request.args.get('id'), 'command': request.args.get('command'), 'status': 'Active'})
-                    for i in to_keep:
-                        writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
+    if request.method =="POST":
+        if request.args.get('password'):
+            if request.args.get('password')==admin_password:
+                command = request.values.get('command')
+                id = request.values.get('id')
+                if len(command.replace(" ",""))==0 or len(id.replace(" ",""))==0:
+                    return render_template("command.html",error="Enter an Id and a command",folder=f'/get_all_clients/{admin_token}?password={admin_password}')
+                if id not in [i[0] for i in get_id_command()]:
+                    last_csv = get_id_command()
+                    to_keep = []
+                    for elem in last_csv:
+                        if id not in elem:
+                            to_keep.append(elem)
+                    with open('id_and_commands.csv', mode='w') as csv_file:
+                        fieldnames = ['id', 'command', 'status']
+                        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow({'id': id, 'command': command, 'status': 'Active'})
+                        for i in to_keep:
+                            writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
+                else:
+                    last_csv = get_id_command()
+                    for index,elem in enumerate(last_csv):
+                        if id in elem:
+                            last_csv[index][1] = command
+                    with open('id_and_commands.csv', mode='w') as csv_file:
+                        fieldnames = ['id', 'command', 'status']
+                        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                        writer.writeheader()
+                        for i in last_csv:
+                            writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
+                return render_template("command.html",error="Added !",folder=f'/get_all_clients/{admin_token}?password={admin_password}')
             else:
-                last_csv = get_id_command()
-                for index,elem in enumerate(last_csv):
-                    if request.args.get('id') in elem:
-                        last_csv[index][1] = request.args.get('command')
-                with open('id_and_commands.csv', mode='w') as csv_file:
-                    fieldnames = ['id', 'command', 'status']
-                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                    writer.writeheader()
-                    for i in last_csv:
-                        writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
-            return "Done !"
+                return render_template("command.html",error="Invalid ID",folder=f'/get_all_clients/{admin_token}?password={admin_password}')
         else:
-            return "Not a valid password"
+            return render_template("command.html",error="Please set a password",foler=f'/get_all_clients/{admin_token}?password={admin_password}')
     else:
-        return "Please set a password, an id, and a command"
+        return render_template("command.html",folder=f'/get_all_clients/{admin_token}?password={admin_password}')
 
 @app.route("/blank/")
 def blank():
