@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>Feedback Pannel</title>
+  </head>
+  <style>
+    html {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+    h1 {
+      font-size: 6em;
+      margin-bottom:1em;
+      text-align:center;
+    }
+    h2 {
+      margin-top:1em;
+    }
+    a {
+      margin-bottom:.5em;
+    }
+  </style>
+  {%if error%}
+  <div class="alert alert-primary" role="alert">
+    {{error}}
+  </div>
+  {%endif%}
+  <h1>Feedback Pannel</h1>
+  <body>
+    <form method="POST">
+      <div class="form-group">
+        <label>ID :</label>
+        <input name="id" type="text" class="form-control" placeholder="Id">
+      </div>
+      <button type="submit" class="btn btn-primary">Fetch</button>
+    </form>
+  {%if content%}
+  <h2>Command feedback:</h2>
+  <a href={{url}}>Refresh</a>
+  <ul class="list-group">
+  {%for i in content.split("\n\n")%}
+    <li class="list-group-item">
+      {%for j in i.split("\n")%}
+      <p>{{j}}</p>
+      {%endfor%}
+    </li>
+  {%endfor%}
+  </ul>
+  {%endif%}
+  </body>
+</html>

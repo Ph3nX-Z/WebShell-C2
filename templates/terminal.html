@@ -1,0 +1,19 @@
+<html>
+  <head>
+  </head>
+  <style>
+    body {
+      background-color:black;
+      color: green;
+    }
+  </style>
+  <body>
+    {%if content%}
+    {%for i in content.split("\n")%}
+    <p>{{i}}</p>
+    {%endfor%}
+    {%else%}
+    <h1>No Content to display</h1>
+    {%endif%}
+  </body>
+</html>
