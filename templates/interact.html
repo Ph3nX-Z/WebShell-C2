@@ -2,23 +2,28 @@
   <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta http-equiv="refresh" content="15">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
   </head>
   <style>
   h1 {
     text-align: center;
     font-size: 6em;
-    margin-bottom: 1em;
+    margin-top: 2.5em;
+    margin-bottom: .5em;
+    font-family: 'Montserrat', sans-serif;
   }
   ul label {
     width:33%;
     text-align: center;
   }
   h2 {
-    text-decoration: underline;
+    font-family: 'Montserrat', sans-serif;
   }
   body {
-    margin-right: 5%;
-    margin-left: 5%;
+    margin-right: 15%;
+    margin-left: 15%;
   }
   </style>
   {%if error_code%}
@@ -27,15 +32,14 @@
   </div>
   {%endif%}
   <body>
-    <h1>Client Pannel</h1>
+    <h1>Remove Client :</h1>
     <h2>Interact:</h2>
     <form method="POST">
     <div class="form-group">
-      <label>Id To Remove :</label>
       <input name="id-text" type="text" class="form-control" placeholder="Id">
       <small id="emailHelp" class="form-text text-muted">The client will be deleted.</small>
     </div>
-    <button type="submit" class="btn btn-primary">Remove</button>
+    <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Remove</button>
     </form>
     <h2>All the clients :</h2>
     <ul class="list-group">

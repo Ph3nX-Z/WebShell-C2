@@ -3,20 +3,30 @@
   <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
     <title>Command Pannel</title>
   </head>
   <style>
     body {
-      margin-left:5%;
-      margin-right:5%;
+      margin-left:15%;
+      margin-right:15%;
     }
     h1 {
+      margin-top: 2.5em;
       text-align: center;
       font-size:6em;
       margin-bottom:1em;
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: .5em;
     }
     a {
       margin-top: .5em;
+      color: gray;
+    }
+    a:hover {
+      color:black;
     }
   </style>
   {%if error%}
@@ -35,7 +45,7 @@
         <label>Command :</label>
         <input name="command" type="text" class="form-control" placeholder="Command">
       </div>
-      <button type="submit" class="btn btn-primary">Send</button>
+      <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Send</button>
     </form>
     {%if folder%}
     <a href={{folder}}>Check The Clients</a>

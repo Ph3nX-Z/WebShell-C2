@@ -12,7 +12,6 @@
     font-size: 6em;
     margin-bottom: 1em;
     font-family: 'Montserrat', sans-serif;
-    text-decoration:.01em underline;
   }
   ul label {
     width:45%;
@@ -37,8 +36,8 @@
     <h1>Admin Links</h1>
     <!--<h2>Links :</h2>-->
     <ul class="list-group">
-      {%for index,i in content%}
-      <li class="list-group-item"><label><strong>Link {{index}} :</strong></label><label><a href={{i}}>Here</a></label></li>
+      {%for i,j in content%}
+      <li class="list-group-item"><label><strong>{{j}}</strong></label><label><a href={{i}}>Here</a></label></li>
       {%endfor%}
     </ul>
   </body>
