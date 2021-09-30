@@ -47,6 +47,20 @@ def remove_one(id):
     else:
         return True
 
+def write_command(id,command):
+    last_csv = get_id_command()
+    to_keep = []
+    for elem in last_csv:
+        if id not in elem:
+            to_keep.append(elem)
+    with open('id_and_commands.csv', mode='w') as csv_file:
+        fieldnames = ['id', 'command', 'status']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow({'id': id, 'command': command, 'status': 'Active'})
+        for i in to_keep:
+            writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
+
 def hash(password,username):
     dk = hashlib.pbkdf2_hmac('sha256', bytes(password,'utf-8'), bytes(username,"utf-8"), 100000)
     return dk.hex()
@@ -167,6 +181,10 @@ def account():
     global admin_token
     global fail_counter
     global admin_usr
+    command_p = f"http://{host1}/command/{admin_token}?password={admin_password}"
+    client_p = f"http://{host1}/get_all_clients/{admin_token}?password={admin_password}"
+    live_feedb = f"http://{host1}/feedback/{admin_token}?password={admin_password}"
+    content = enumerate([command_p,client_p,live_feedb])
     if fail_counter == 3:
         return render_template("admin.html",error_code=f"Acces Blocked, max attempts excelled.")
     if request.method == "POST":
@@ -174,7 +192,7 @@ def account():
         password = request.values.get('password')
         if hash(password,user)==admin_hash and user == admin_usr:
             fail_counter = 0
-            return f"<h1 style='text-align:center;'>Admin links</h1><strong>Command Pannel :</strong><p>http://{host1}/command/{admin_token}?password={admin_password}</p>"+f"<strong>Clients Pannel :</strong><p>http://{host1}/get_all_clients/{admin_token}?password={admin_password}</p><strong>Live Feedback :</strong><p>http://{host1}/feedback/{admin_token}?password={admin_password}</p>"
+            return render_template("links.html",content=content)
         else:
             fail_counter+=1
             return render_template("admin.html",error_code=f"Access Refused : {fail_counter}/3 attempts.")
@@ -224,18 +242,7 @@ def command_panel():
                 if len(command.replace(" ",""))==0 or len(id.replace(" ",""))==0:
                     return render_template("command.html",error="Enter an Id and a command",folder=f'/get_all_clients/{admin_token}?password={admin_password}')
                 if id not in [i[0] for i in get_id_command()]:
-                    last_csv = get_id_command()
-                    to_keep = []
-                    for elem in last_csv:
-                        if id not in elem:
-                            to_keep.append(elem)
-                    with open('id_and_commands.csv', mode='w') as csv_file:
-                        fieldnames = ['id', 'command', 'status']
-                        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                        writer.writeheader()
-                        writer.writerow({'id': id, 'command': command, 'status': 'Active'})
-                        for i in to_keep:
-                            writer.writerow({'id': i[0], 'command': i[1], 'status': i[2]})
+                    write_command(id,command)
                 else:
                     last_csv = get_id_command()
                     for index,elem in enumerate(last_csv):

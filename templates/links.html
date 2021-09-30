@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+  </head>
+  <style>
+  h1 {
+    margin-top:1em;
+    text-align: center;
+    font-size: 6em;
+    margin-bottom: 1em;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration:.01em underline;
+  }
+  ul label {
+    width:45%;
+    text-align: left;
+    padding-left:.5em;
+  }
+  label strong {
+    text-align:center;
+    font-family: 'Montserrat', sans-serif;
+  }
+  h2 {
+    font-weight:.3em;
+    margin-bottom:2em;
+    font-family: 'Montserrat', sans-serif;
+  }
+  body {
+    margin-right: 5%;
+    margin-left: 5%;
+  }
+  </style>
+  <body>
+    <h1>Admin Links</h1>
+    <!--<h2>Links :</h2>-->
+    <ul class="list-group">
+      {%for index,i in content%}
+      <li class="list-group-item"><label><strong>Link {{index}} :</strong></label><label><a href={{i}}>Here</a></label></li>
+      {%endfor%}
+    </ul>
+  </body>
+</html>
