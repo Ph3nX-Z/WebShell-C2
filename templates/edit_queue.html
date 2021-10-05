@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <title>Edit Queue</title>
+  </head>
+  <style>
+    body {
+      margin-left:15%;
+      margin-right:15%;
+    }
+    h1 {
+      margin-top: 2.5em;
+      text-align: center;
+      font-size:6em;
+      margin-bottom:1em;
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: .5em;
+    }
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+    }
+    a {
+      margin-top: .5em;
+      color: gray;
+    }
+    a:hover {
+      color:black;
+    }
+  </style>
+  {%if error%}
+  <div class="alert alert-primary" role="alert">
+    {{error}}
+  </div>
+  {%endif%}
+  <h1>Edit Queue</h1>
+  <body>
+    <form method="POST">
+      <div class="form-group">
+        <label>ID :</label>
+        <input name="id" type="text" class="form-control" placeholder="Id">
+      </div>
+      <div class="form-group">
+        <label>Commands :</label>
+        <!--<input name="payload" type="text" class="form-control" placeholder="Payload">-->
+        <textarea name="payload" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Send</button>
+    </form>
+    {%if queue%}
+    <h2>Active Queues :</h2>
+    <ul class="list-group">
+    {%for i in queue%}
+    <li class="list-group-item">{{i}}</li>
+    {%endfor%}
+    {%endif%}
+    </ul>
+  </body>
+</html>

