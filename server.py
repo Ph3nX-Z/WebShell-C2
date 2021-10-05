@@ -66,6 +66,17 @@ def hash(password,username):
     dk = hashlib.pbkdf2_hmac('sha256', bytes(password,'utf-8'), bytes(username,"utf-8"), 100000)
     return dk.hex()
 
+def mimikatz():
+    print("+-----------+")
+    print("|  Mimikatz |")
+    print("+-----------+")
+
+def shell():
+    pass
+
+def poweroff():
+    pass
+
 global admin_cookie
 admin_cookie = Suggested_pass(25,25,25)
 
@@ -94,6 +105,10 @@ fail_counter = 0
 
 global app
 app = Flask(__name__)
+
+global dico_action
+dico_action = {1:mimikatz,2:shell,3:poweroff}
+
 
 @app.route('/')
 def my_form():
@@ -256,9 +271,17 @@ def edit_queue():
             if request.method == "GET":
                 return render_template("edit_queue.html",queue = glob.glob("./queue/*.*"))
             elif request.method == "POST":
+                if request.form.get("auto")!=0:
+                    action = request.values.get("auto")
+                    if action == "0":
+                        return render_template("edit_queue.html",error="Invalid auto command.")
+                    else:
+                        global dico_action
+                        dico_action[int(action)]()
+                        return render_template("edit_queue.html",error="Done !")
                 id = request.values.get('id')
                 payload = request.values.get('payload')
-                with open(f"./queue/{id}.txt",'w') as file:
+                with open(f"./queue/{id}.txt",'a') as file:
                     file.write(payload)
                 return render_template("edit_queue.html",error="Done !",queue = glob.glob("./queue/*.*"))
         else:

