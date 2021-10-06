@@ -568,7 +568,6 @@ try:
         root.mainloop()
     else:
         print('[-] Inside Docker, Running no tkinter version, host set to 0.0.0.0')
-        global host1
         host1 = "0.0.0.0"
 except:
     sys.exit()
