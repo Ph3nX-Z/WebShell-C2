@@ -14,4 +14,4 @@ RUN pip3 install flask
 
 
 EXPOSE 80
-CMD ["python3 server.py &"]
+CMD ["python3","server.py","&"]
