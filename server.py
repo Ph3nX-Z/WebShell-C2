@@ -568,10 +568,10 @@ try:
         root.protocol("WM_DELETE_WINDOW", on_closing)
         root.mainloop()
     else:
-        print('[-] Inside Docker, Running no tkinter version, host set to 0.0.0.0')
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
         host1 = local_ip
+        print(f'[-] Inside Docker, Running no tkinter version, host set to {host1}')
 except:
     sys.exit()
 try:
