@@ -21,11 +21,14 @@ python3 server.py
 or
 ```sh
 docker build ./
-docker run <name>
+docker run -it <name>
 ```
 #### Uninstall
 ```sh
 rm -rf WebShell-C2/
+```
+```sh
+docker system prune -a
 ```
 
 ### Features
