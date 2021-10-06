@@ -527,6 +527,7 @@ def blank():
 
 def start_server():
     global app
+    app.logger.disabled = True
     app.run(port=80,threaded=True,host="0.0.0.0")
 
 ##### TKINTER
