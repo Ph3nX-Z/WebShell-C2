@@ -44,6 +44,13 @@ docker system prune -a
 |Total lines | 1128 |
 
 
+### Features to come :
+
+* Load mimikatz in memory.
+* Auto Pivoting.
+* Go Shellcode execution implant.
+* Persistance.
+* Shell migration.
 
 ## Media
 
