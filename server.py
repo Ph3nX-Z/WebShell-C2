@@ -551,18 +551,23 @@ except:
     create_csv()
 
 try:
-    global root
-    root = Tk()
-    root.title("Launcher")
-    root.geometry("500x200")
-    ip_host=StringVar()
-    label_big = Label(root, text="Host Set :", font=("Times New Roman", 35, "bold")).pack()
-    label_low = Label(root, text="Set an host (default 0.0.0.0) :").pack()
-    ip_ENTRY= Entry(root, textvariable=ip_host).pack()
-    submit = Button(root, text='Set Ip',command=set_ip).pack()
+    if os.popen("grep -q docker /proc/1/cgroup") == "":
+        global root
+        root = Tk()
+        root.title("Launcher")
+        root.geometry("500x200")
+        ip_host=StringVar()
+        label_big = Label(root, text="Host Set :", font=("Times New Roman", 35, "bold")).pack()
+        label_low = Label(root, text="Set an host (default 0.0.0.0) :").pack()
+        ip_ENTRY= Entry(root, textvariable=ip_host).pack()
+        submit = Button(root, text='Set Ip',command=set_ip).pack()
 
-    root.protocol("WM_DELETE_WINDOW", on_closing)
-    root.mainloop()
+        root.protocol("WM_DELETE_WINDOW", on_closing)
+        root.mainloop()
+    else:
+        print('[-] Inside Docker, Running no tkinter version, host set to 0.0.0.0')
+        global host1
+        host1 = "0.0.0.0"
 except:
     sys.exit()
 try:

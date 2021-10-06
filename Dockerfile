@@ -1,4 +1,3 @@
-
 FROM ubuntu
 
 RUN export DEBIAN_FRONTEND=noninteractive
