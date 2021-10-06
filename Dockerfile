@@ -15,4 +15,4 @@ RUN pip3 install flask
 
 
 EXPOSE 80
-CMD ["su","ubuntu","-c","python3 /home/webshell-C2/server.py"]
+CMD ["sudo","python3 /home/webshell-C2/server.py"]
