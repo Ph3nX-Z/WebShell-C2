@@ -9,6 +9,7 @@ import datetime
 import os
 import subprocess
 import random
+import socket
 if os.popen("grep -q docker /proc/1/cgroup") == "":
     from tkinter.messagebox import *
     from tkinter import *
