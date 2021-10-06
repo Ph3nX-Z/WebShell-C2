@@ -10,7 +10,7 @@ import os
 import subprocess
 import random
 import socket
-if  ".dockerenv" not in glob.glob("/.*"):
+if  "/.dockerenv" not in glob.glob("/.*"):
     from tkinter.messagebox import *
     from tkinter import *
 
@@ -554,7 +554,7 @@ except:
     create_csv()
 
 try:
-    if  ".dockerenv" not in glob.glob("/.*"):
+    if  "/.dockerenv" not in glob.glob("/.*"):
         global root
         root = Tk()
         root.title("Launcher")
