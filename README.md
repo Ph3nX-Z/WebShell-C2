@@ -3,7 +3,7 @@ Web Based C2
 
 VERSION : v1.0
 
-![](home.png)
+![](./readme_img/home.png)
 
 
 ## Presentation
