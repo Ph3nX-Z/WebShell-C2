@@ -38,7 +38,7 @@ rm -rf WebShell-C2/
 | In developement    | Y       |
 | Web Interface   | Y       |
 |Gui interface | N |
-|Total lines | 1111 |
+|Total lines | 1121 |
 
 
 
