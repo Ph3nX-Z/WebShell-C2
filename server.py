@@ -568,7 +568,9 @@ try:
         root.mainloop()
     else:
         print('[-] Inside Docker, Running no tkinter version, host set to 0.0.0.0')
-        host1 = "0.0.0.0"
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        host1 = local_ip
 except:
     sys.exit()
 try:
