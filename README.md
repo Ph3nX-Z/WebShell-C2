@@ -60,13 +60,13 @@ docker system prune -a
 ### Index
 ![](./readme_img/site1.png)
 
-### Commands Pannel
+### Commands Panel
 ![](./readme_img/site2.png)
 
 ### Remove Client
 ![](./readme_img/site3.png)
 
-### FeedBack Pannel
+### FeedBack Panel
 ![](./readme_img/site4.png)
 
 ### File Upload
