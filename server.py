@@ -424,7 +424,7 @@ def account():
     live_feedb = f"http://{host1}/feedback/{admin_token}?password={admin_password}"
     file_upl = f'http://{host1}/file_upload/{admin_token}?password={admin_password}'
     edit = f'http://{host1}/edit_queue/{admin_token}?password={admin_password}'
-    content = [(command_p,"Command Pannel :"),(client_p,"Client Pannel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :"),(edit,"Edit Queue :")]
+    content = [(command_p,"Command Panel :"),(client_p,"Client Panel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :"),(edit,"Edit Queue :")]
     if fail_counter == 3:
         return render_template("admin.html",error_code=f"Acces Blocked, max attempts excelled.")
     if request.method == "POST":
