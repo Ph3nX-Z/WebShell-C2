@@ -48,7 +48,7 @@ docker system prune -a
 
 * Load mimikatz in memory.
 * Auto Pivoting.
-* Go Shellcode execution implant.
+* Go Shellcode execution implant (Syscall, CreateRemoteThread).
 * Persistance.
 * Shell migration.
 
