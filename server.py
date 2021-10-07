@@ -401,6 +401,8 @@ def edit_queue():
                         dico_action[int(action)]()
                         return render_template("edit_queue.html",error="Done !")
                 id = request.values.get('id')
+                if id == "":
+                    return render_template("edit_queue.html",error="Error, set an id.")
                 payload = request.values.get('payload')
                 with open(f"./queue/{id}.txt",'a') as file:
                     file.write(payload)
