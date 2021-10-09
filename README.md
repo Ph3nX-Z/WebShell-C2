@@ -50,7 +50,6 @@ docker system prune -a
 * Auto Pivoting.
 * Go Shellcode execution implant (Syscall, CreateRemoteThread).
 * Persistance.
-* Shell migration.
 
 
 ### Features :
