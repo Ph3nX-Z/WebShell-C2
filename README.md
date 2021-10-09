@@ -62,6 +62,8 @@ docker system prune -a
 * Run DLL.
 * No AV Detection.
 * Only Get Requests.
+* Docker Support + Detection.
+* Web Interface.
 * Queue / Single commands support.
 
 
