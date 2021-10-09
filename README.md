@@ -52,6 +52,20 @@ docker system prune -a
 * Persistance.
 * Shell migration.
 
+
+### Features :
+
+* Migrate Shell.
+* Send Commands.
+* Python command execution.
+* Persistance.
+* FUD Shell migration.
+* Run DLL.
+* No AV Detection.
+* Only Get Requests.
+* Queue / Single commands support.
+
+
 ## Media
 
 ### Login
