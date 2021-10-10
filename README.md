@@ -1,7 +1,7 @@
 # WebShell C2
 Web Based C2
 
-VERSION : v1.0
+VERSION : v1.2
 
 ![](./readme_img/home.png)
 
