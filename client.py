@@ -106,6 +106,6 @@ while True:
             time.sleep(10)
     except:
         time.sleep(20)
-global th
+
 if th!=None:
     th.join()
