@@ -101,7 +101,7 @@ Usefull Info:
 Back-End / Front-End / Code : [Ph3nX](https://github.com/Ph3nX-Z)
 
 ## Supporters:
-[![](https://reporoster.com/stars/ph3nx-Z/WebShell-C2)](https://github.com/Ph3nX-Z/WebShell-C2/stargazers)
+[![](https://reporoster.com/stars/dark/ph3nx-Z/WebShell-C2)](https://github.com/Ph3nX-Z/WebShell-C2/stargazers)
 
 ## Contributing
 
