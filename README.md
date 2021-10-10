@@ -31,12 +31,10 @@ rm -rf WebShell-C2/
 docker system prune -a
 ```
 
-### Features
+### Security and program
 
 |  Options   | Webshell C2 |
 |------------|-----------------|
-| Reverse shell     | Y       |
-| Auto Commands    | Y       |
 | Secured Session | Y       |
 | In developement    | Y       |
 | Web Interface   | Y       |
