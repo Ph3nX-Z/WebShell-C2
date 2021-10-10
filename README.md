@@ -54,7 +54,7 @@ docker system prune -a
 
 ### Features :
 
-* Migrate Shell.
+* FUD.
 * Send Commands.
 * Python command execution.
 * Persistance.
