@@ -65,7 +65,7 @@ docker system prune -a
 
 
 ## Media
-### Detection
+### Detection for Dev Client
 ![](./readme_img/scan.png)
 
 ### Login
