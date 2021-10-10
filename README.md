@@ -100,6 +100,9 @@ Usefull Info:
 
 Back-End / Front-End / Code : [Ph3nX](https://github.com/Ph3nX-Z)
 
+## Thanks To
+![](https://github.com/ph3nx-Z/WebShell-C2/stargazers)
+
 ## Contributing
 
 1. Fork it (<https://github.com/yourname/yourproject/fork>)
