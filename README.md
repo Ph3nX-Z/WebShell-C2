@@ -57,10 +57,8 @@ docker system prune -a
 * FUD.
 * Send Commands.
 * Python command execution.
-* Persistance.
 * FUD Shell migration.
 * Run DLL.
-* No AV Detection.
 * Only Get Requests.
 * Docker Support + Detection.
 * Web Interface.
