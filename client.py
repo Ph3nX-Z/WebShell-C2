@@ -56,7 +56,7 @@ else:
     host = "0.0.0.0"
 session = requests.Session()
 
-if "id" not in glob.glob("*.*"):
+if "id" not in glob.glob("*"):
     while True:
         try:
             response = session.get(f"http://{host}/get_id/",headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
