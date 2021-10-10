@@ -39,7 +39,7 @@ docker system prune -a
 | In developement    | Y       |
 | Web Interface   | Y       |
 |Gui interface | N |
-|Total lines | 1273 |
+|Total lines | 1294 |
 
 
 ### Features to come :
