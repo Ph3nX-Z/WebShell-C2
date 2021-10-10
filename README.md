@@ -65,6 +65,7 @@ docker system prune -a
 * Docker Support + Detection.
 * Web Interface.
 * Queue / Single commands support.
+* Lnk persistence.
 
 
 ## Media
