@@ -47,8 +47,6 @@ docker system prune -a
 * Load mimikatz in memory.
 * Auto Pivoting.
 * Go Shellcode execution implant (Syscall, CreateRemoteThread).
-* WMI Persistance.
-* Disk Encryption.
 * Live Machine status.
 
 
@@ -64,6 +62,8 @@ docker system prune -a
 * Web Interface.
 * Queue / Single commands support.
 * Lnk persistence (to patch).
+* WMI persistence.
+* Disk Encryption / Decryption.
 
 
 ## Media
