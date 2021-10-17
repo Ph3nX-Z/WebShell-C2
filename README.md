@@ -62,7 +62,7 @@ docker system prune -a
 * Web Interface.
 * Queue / Single commands support.
 * Lnk persistence (to patch).
-* WMI persistence.
+* WMI persistence (needs elevated rights).
 * Disk Encryption / Decryption.
 
 
