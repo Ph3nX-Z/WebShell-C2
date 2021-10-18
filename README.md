@@ -47,7 +47,6 @@ docker system prune -a
 * Load mimikatz in memory.
 * Auto Pivoting.
 * Go Shellcode execution implant (Syscall, CreateRemoteThread).
-* Live Machine status.
 
 
 ### Features :
@@ -62,6 +61,7 @@ docker system prune -a
 * Web Interface.
 * Queue / Single commands support.
 * Lnk persistence (to patch).
+* Live Machine status.
 * WMI persistence (needs elevated rights).
 * Disk Encryption / Decryption.
 
