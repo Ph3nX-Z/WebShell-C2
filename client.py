@@ -52,9 +52,9 @@ if MODE=="dev":
             a = file.read()
         host = a.split("\n")[0]
     except:
-        pass
+        host="127.0.0.1"
 else:
-    host = "0.0.0.0"
+    host = "127.0.0.1"
 session = requests.Session()
 
 if "id" not in glob.glob("*.*"):
