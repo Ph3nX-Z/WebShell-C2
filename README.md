@@ -103,7 +103,7 @@ Usefull Info:
 
 Back-End / Front-End / Code : [Ph3nX](https://github.com/Ph3nX-Z)
 
-Report a Bug : [Report](https://github.com/Ph3nX-Z/WebShell-C2/tree/main/.github/ISSUE_TEMPLATE)
+Report a Bug : [Report](https://github.com/Ph3nX-Z/WebShell-C2/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
 
 ## Supporters:
 [![](https://reporoster.com/stars/dark/ph3nx-Z/WebShell-C2)](https://github.com/Ph3nX-Z/WebShell-C2/stargazers)
