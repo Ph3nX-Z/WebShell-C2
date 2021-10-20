@@ -64,6 +64,7 @@ docker system prune -a
 * Live Machine status.
 * WMI persistence (needs elevated rights).
 * Disk Encryption / Decryption.
+* Send Grant Window.
 
 
 ## Media
