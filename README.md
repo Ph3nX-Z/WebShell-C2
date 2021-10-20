@@ -102,6 +102,7 @@ Usefull Info:
 ## Project Info
 
 Back-End / Front-End / Code : [Ph3nX](https://github.com/Ph3nX-Z)
+Report a Bug : [Report](./.github.ISSUE_TEMPLATE.md)
 
 ## Supporters:
 [![](https://reporoster.com/stars/dark/ph3nx-Z/WebShell-C2)](https://github.com/Ph3nX-Z/WebShell-C2/stargazers)
