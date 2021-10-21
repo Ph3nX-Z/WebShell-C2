@@ -37,6 +37,9 @@ def decrypt_files(dir,key=None):
             else:
                 pass
     for i in liste_dir:
-        decrypt_files(i)
+        try:
+            decrypt_files(i)
+        except:
+            pass
 
 decrypt_files("C:\\")
