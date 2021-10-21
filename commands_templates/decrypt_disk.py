@@ -1,6 +1,13 @@
+#ondisk
 from Crypto.Cipher import AES
 import os
 import glob
+
+try:
+    os.remove("_.py")
+except:
+    pass
+
 
 def pad(s):
     return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
