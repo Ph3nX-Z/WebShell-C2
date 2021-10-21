@@ -62,7 +62,7 @@ docker system prune -a
 * Queue / Single commands support.
 * Lnk persistence (to patch).
 * Live Machine status.
-* WMI persistence (needs elevated rights, may not work).
+* WMI persistence (needs elevated rights).
 * Disk Encryption / Decryption.
 * Send Grant Window.
 
