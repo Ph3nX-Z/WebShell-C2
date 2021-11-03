@@ -93,6 +93,9 @@ docker system prune -a
 ### Edit Queue
 ![](./readme_img/site6.png)
 
+### Attack vectors
+![](./readme_img/vectors.png)
+
 ## Legal
 
 Usefull Info:
